@@ -5,29 +5,38 @@ from cestica import Cestica
 import pytest
 k = 9 * 10**9
 
-def test_rastojanje():
-    cestica1 = Cestica((1, 2), (3, 4), 5, 6)
-    cestica2 = Cestica((4, 5), (6, 7), 8, 9)
-    assert Interakcija.rastojanje(cestica1, cestica2) == math.sqrt((1 - 4)**2 + (2 - 5)**2)
+@pytest.mark.parametrize("novo_rastojanje, cestica1, cestica2", [
+    (math.sqrt(18), Cestica((1, 2), (3, 4), 5, 6), Cestica((4, 5), (6, 7), 8, 9)),
+    (math.sqrt(5), Cestica((5, 4), (6, 7), 8, 9), Cestica((4, 6), (6, 7), 8, 9), )
+])
+def test_rastojanje(novo_rastojanje, cestica1, cestica2):
+    assert Interakcija.rastojanje(cestica1, cestica2) == novo_rastojanje
 
-def test_Kulonov_zakon():
-    cestica1 = Cestica((1, 2), (3, 4), 5, 6)
-    cestica2 = Cestica((4, 5), (6, 7), 8, 9)
-    assert Interakcija.Kulonov_zakon(cestica1, cestica2) == (k * abs(cestica1._naelektrisanje * cestica2._naelektrisanje) / (Interakcija.rastojanje(cestica1, cestica2)**3) * abs(4 - 1), k * abs(cestica1._naelektrisanje * cestica2._naelektrisanje) / (Interakcija.rastojanje(cestica1, cestica2)**3) * abs(5 - 2))
+@pytest.mark.parametrize("trazena_sila, cestica1, cestica2", [
+    ((round(27 * (10**9) / math.sqrt(2)), round(27 * (10**9) / math.sqrt(2))), Cestica((1, 2), (3, 4), 5, 6), Cestica((4, 5), (6, 7), 8, 9))
+])
+def test_Kulonov_zakon(trazena_sila, cestica1, cestica2):
+    x, y = Interakcija.Kulonov_zakon(cestica1, cestica2)
+    x1 = round(x)
+    y1 = round(y)
+    assert (x1, y1) == trazena_sila
 
-def test_ubrzanje():
-    cestica = Cestica((1, 2), (3, 4), 5, 6)
-    sila = (1, 2)
-    assert Interakcija.ubrzanje(cestica, sila) == (1 / 5, 2 / 5)
+@pytest.mark.parametrize("trazeno_ubrzanje, cestica, sila", [
+    ((1 / 5, 2 / 5), Cestica((1, 2), (3, 4), 5, 6), (1, 2))
+])
+def test_ubrzanje(trazeno_ubrzanje, cestica, sila):
+    assert Interakcija.ubrzanje(cestica, sila) == trazeno_ubrzanje
 
-def test_ukupna_sila():
-    sile = [(1, 2), (3, 4), (5, 6)]
-    assert Interakcija.ukupna_sila(sile) == (1 + 3 + 5, 2 + 4 + 6)
+@pytest.mark.parametrize("sile, trazena_sila", [
+    ([(1, 2), (4, 5), (7, 1)], (12, 8))
+])
 
-def test_Ojlerov_algoritam():
-    cestica = Cestica((1, 2), (3, 4), 5, 6)
-    t = 2
-    assert Interakcija.Ojlerov_algoritam(cestica, t) == (1 + 3 * t, 2 + 4 * t)
+def test_ukupna_sila(sile, trazena_sila):
+    assert Interakcija.ukupna_sila(sile) == trazena_sila
 
-if __name__ == "__main__":
-    pytest.main()
+@pytest.mark.parametrize("trazena_pozicija, cestica, vreme", [
+    ((4, 6), Cestica((1, 2), (3, 4), 3, 4), 1), 
+])
+
+def test_Ojlerov_algoritam(trazena_pozicija, cestica, vreme):
+    assert Interakcija.Ojlerov_algoritam(cestica, vreme) == trazena_pozicija
