@@ -7,11 +7,6 @@ class Interakcija():
         x2, y2 = cestica2._pozicija
         return math.sqrt((x1 - x2)**2 + (y1 - y2)**2)
 
-    def Lennard_Jonesov_potencijal(cestica1, cestica2, epsilon, sigma):
-        r = Interakcija.rastojanje(cestica1, cestica2)
-        V = 4 * epsilon[(sigma/r)**12 - (sigma/r)**6]
-        return diff(V, r)
-
     def Kulonov_zakon(cestica1, cestica2):
         r = Interakcija.rastojanje(cestica1, cestica2)
         x1, y1 = cestica1._pozicija
@@ -23,10 +18,7 @@ class Interakcija():
 
 
     def sila(cestica1, cestica2):
-        if cestica1._naelektrisanje == 0 or cestica2._naelektrisanje == 0:
-            return Interakcija.Lennard_Jonesov_potencijal(cestica1, cestica2)
-        else:
-            return Interakcija.Kulonov_zakon(cestica1, cestica2)
+        return Interakcija.Kulonov_zakon(cestica1, cestica2)
 
     def ubrzanje(cestica, sila):
         fx, fy = sila
@@ -51,8 +43,4 @@ class Interakcija():
         y += vy * t
 
         return (x, y)
-        
-    def Verletov_algoritam(cestica, sila, t):
-        a = Interakcija.ubrzanje(cestica, sila)
-        promenjena_pozicija = cestica._pozicija + cestica._brzina * t + (a * t**2)/2
-        return promenjena_pozicija
+    

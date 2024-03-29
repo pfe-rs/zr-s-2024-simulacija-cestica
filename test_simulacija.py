@@ -1,9 +1,17 @@
+import pytest
+from sympy import diff
 from simulacija import Simulacija
 
+@pytest.fixture
+def simulacija():
+    return Simulacija(4, 10, 10, 100)
 
-simulacija = Simulacija(4, 10, 10, 10) 
-cestice = simulacija.inicijalizacija_cestica()
-parovi = Simulacija.parovi_cestica(cestice)
+def test_inicijalizacija_cestica(simulacija):
+    assert len(simulacija.cestice) == 4 
 
-for par in parovi:
-    print(f"Par čestica: {par[0]} - {par[1]}")
+def test_parovi_cestica(simulacija):
+    parovi = simulacija.parovi_cestica() 
+    assert len(parovi) == (simulacija.broj_cestica * (simulacija.broj_cestica - 1)) // 2
+
+if __name__ == "__main__":
+    pytest.main()

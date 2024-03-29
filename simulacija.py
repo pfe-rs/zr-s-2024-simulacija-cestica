@@ -22,7 +22,8 @@ class Simulacija():
             cestica = Cestica(pozicija, brzina, masa, naelektrisanje)
             cestice.append(cestica)
         return cestice
-    def parovi_cestica(cestice):
-        parovi = list(combinations(cestice, 2))
+    
+    def parovi_cestica(self): 
+        parovi = list(combinations(self.cestice, 2))
         return parovi
     

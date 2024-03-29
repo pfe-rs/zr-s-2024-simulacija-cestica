@@ -1,13 +1,17 @@
+import pytest
 from cestica import Cestica
-from interakcija import Interakcija
 
+def test_azuriranje_pozicije():
+    cestica = Cestica((0, 0), (1, 1), 1, 0) 
+    cestica.azuriranje_pozicije(1) 
+    nova_pozicija = cestica._pozicija
+    assert nova_pozicija == (1, 1) 
 
-cestica1 = Cestica((4, 3), (1, 5), 2, 5)
-cestica2 = Cestica((1, 4), (7, 3), 3, 2)
-sila = Interakcija.sila(cestica1, cestica2)
-t = 2 
-print(Interakcija.ubrzanje(cestica1, sila))
-cestica2.azuriranje_pozicije(t)
-cestica1.azuriranje_brzine(sila, t)
-print(cestica1)
-print(cestica2)
+def test_azuriranje_brzine():
+    cestica = Cestica((0, 0), (1, 1), 1, 0) 
+    cestica.azuriranje_brzine((2, 2), 1) 
+    nova_brzina = cestica._brzina
+    assert nova_brzina == (3, 3) 
+
+if __name__ == "__main__":
+    pytest.main()
